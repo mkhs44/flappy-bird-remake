@@ -22,6 +22,9 @@
 		588CFFA71D13361600FB17B6 /* FlappyBirdy.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 588CFFA61D13361600FB17B6 /* FlappyBirdy.ttf */; };
 		58E8052F1D2DCA7100C313C9 /* MenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58E8052E1D2DCA7100C313C9 /* MenuScene.swift */; };
 		58E805351D2DEF3B00C313C9 /* MenuScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 58E805341D2DEF3B00C313C9 /* MenuScene.sks */; };
+		58FB4BC81D49801F006E1ADC /* FlapSE.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 58FB4BC71D49801F006E1ADC /* FlapSE.mp3 */; };
+		58FB4BCA1D498038006E1ADC /* PointSE.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 58FB4BC91D498038006E1ADC /* PointSE.mp3 */; };
+		58FB4BCC1D498041006E1ADC /* DiedSE.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 58FB4BCB1D498041006E1ADC /* DiedSE.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +66,9 @@
 		588CFFA61D13361600FB17B6 /* FlappyBirdy.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FlappyBirdy.ttf; sourceTree = "<group>"; };
 		58E8052E1D2DCA7100C313C9 /* MenuScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuScene.swift; sourceTree = "<group>"; };
 		58E805341D2DEF3B00C313C9 /* MenuScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MenuScene.sks; sourceTree = "<group>"; };
+		58FB4BC71D49801F006E1ADC /* FlapSE.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = FlapSE.mp3; path = FlappyBirdRemake/FlapSE.mp3; sourceTree = "<group>"; };
+		58FB4BC91D498038006E1ADC /* PointSE.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = PointSE.mp3; path = FlappyBirdRemake/PointSE.mp3; sourceTree = "<group>"; };
+		58FB4BCB1D498041006E1ADC /* DiedSE.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = DiedSE.mp3; path = FlappyBirdRemake/DiedSE.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,6 +131,7 @@
 				588CFF741D0B87CF00FB17B6 /* Main.storyboard */,
 				588CFF9E1D0DF9A700FB17B6 /* Bird.atlas */,
 				588CFF771D0B87CF00FB17B6 /* Assets.xcassets */,
+				58FB4BCD1D49809C006E1ADC /* Sounds */,
 				588CFF791D0B87CF00FB17B6 /* LaunchScreen.storyboard */,
 				588CFF7C1D0B87CF00FB17B6 /* Info.plist */,
 			);
@@ -147,6 +154,17 @@
 				588CFF921D0B87CF00FB17B6 /* Info.plist */,
 			);
 			path = FlappyBirdRemakeUITests;
+			sourceTree = "<group>";
+		};
+		58FB4BCD1D49809C006E1ADC /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				58FB4BC91D498038006E1ADC /* PointSE.mp3 */,
+				58FB4BCB1D498041006E1ADC /* DiedSE.mp3 */,
+				58FB4BC71D49801F006E1ADC /* FlapSE.mp3 */,
+			);
+			name = Sounds;
+			path = ..;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -254,7 +272,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				58FB4BCC1D498041006E1ADC /* DiedSE.mp3 in Resources */,
 				588CFF6F1D0B87CF00FB17B6 /* GameScene.sks in Resources */,
+				58FB4BCA1D498038006E1ADC /* PointSE.mp3 in Resources */,
+				58FB4BC81D49801F006E1ADC /* FlapSE.mp3 in Resources */,
 				588CFFA51D1335B000FB17B6 /* 04B_19__.TTF in Resources */,
 				588CFF9F1D0DF9A700FB17B6 /* Bird.atlas in Resources */,
 				588CFFA71D13361600FB17B6 /* FlappyBirdy.ttf in Resources */,

@@ -16,6 +16,7 @@ struct PhysicsCatagory {
 
 }
 
+
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var world = SKNode()
@@ -58,11 +59,50 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let three = SKLabelNode()
     
     
+    var spawn = SKAction()
+    var delay = SKAction()
+
+    var spawnDelay = SKAction()
+    var spawnDelayForever = SKAction()
+    
+    var movePipes = SKAction()
+    var removePipes = SKAction()
+
+    
+    
+    
+    
+    
     func pauseScene() {
         if pause == false {
             pause = true
             pauseBTN.hidden = true
             playBTN.hidden = false
+            Bird.name = "Bird"
+            Ground.name = "Ground"
+            Background.name = "Background"
+            
+            
+            /*self.removeActionForKey("spawnDelayForever")
+            self.removeActionForKey("moveAndRemove")
+            
+            pipePair.paused = true
+            
+            enumerateChildNodesWithName("Bird", usingBlock: ({
+                (node, error) in
+                
+                node.speed = 0
+                node.physicsBody?.velocity = CGVectorMake(0, 0)
+                node.physicsBody?.affectedByGravity = false
+            
+
+            
+            }))
+            
+            stopAnimateBG(animateBG())*/
+
+
+            
             let waitTime = SKAction.waitForDuration(0.1)
             runAction(waitTime)
             
@@ -73,6 +113,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
             })
             
+            
             let pauseDelay = SKAction.sequence([waitTime, pauseAction])
             self.runAction(pauseDelay)
 
@@ -81,13 +122,31 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     }
     
+    
+    
     func playScene() {
         if pause == true {
             pause = false
             playBTN.hidden = true
             pauseBTN.hidden = false
             scene!.view?.paused = false
-
+            Bird.physicsBody?.affectedByGravity = true
+            
+            /*self.runAction(spawnDelayForever)
+            self.runAction(moveAndRemove)
+            pipePair.paused = false
+            
+            enumerateChildNodesWithName("pipePair", usingBlock: ({
+                (node, error) in
+                
+                node.paused = false
+                node.speed = 1
+                
+                
+            }))*/
+            
+            
+            
             let waitTime = SKAction.waitForDuration(0.3)
             
             let hoverBird = SKAction.runBlock({
@@ -166,7 +225,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let countdown = SKAction.sequence([waitTime, threeAction, waitTime, twoAction, waitTime, oneAction])
             self.runAction(countdown)*/
             
-    
+            
             
         
         }
@@ -262,6 +321,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         
         self.physicsWorld.contactDelegate = self
+    
         
         
         for i in 0..<2 {
@@ -362,6 +422,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             score += 1
             scoreLbl.text = "\(score)"
+            runAction(SKAction.playSoundFileNamed("PointSE.mp3", waitForCompletion: false))
             
         }
         
@@ -381,6 +442,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             if died == false {
                 died = true
+                SKAction(runAction(SKAction.playSoundFileNamed("DiedSE.mp3", waitForCompletion: false)))
                 Bird.removeAllActions()
                 Bird.texture = SKTexture(imageNamed: "Birdbw.png")
                 
@@ -391,6 +453,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 }
                 
                 createBTN()
+                
             }
         }
         
@@ -398,8 +461,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        
-        
+        spawn = SKAction.runBlock({
+                        () in
+                        
+                        self.createPipes()
+                    })
+
+        delay = SKAction.waitForDuration(2)
+        spawnDelay = SKAction.sequence([spawn, delay])
+        spawnDelayForever = SKAction.repeatActionForever(spawnDelay)
+
         
         if gameStarted == false {
             
@@ -415,25 +486,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     scoreLbl.hidden = false
                     pauseBTN.hidden = false
                     gameStarted = true
+                    pause = false
                     Bird.physicsBody?.affectedByGravity = true
-                    let spawn = SKAction.runBlock({
-                        () in
-                        
-                        self.createPipes()
-                    })
+                    pipePair.name = "pipePair"
                     
-                    let delay = SKAction.waitForDuration(2)
-                    let spawnDelay = SKAction.sequence([spawn, delay])
-                    let spawnDelayForever = SKAction.repeatActionForever(spawnDelay)
-                    self.runAction(spawnDelayForever)
+                    
+                    self.runAction(spawnDelayForever, withKey: "spawnDelayForever")
+                
+                    
                     
                     let distance = CGFloat(self.frame.width + pipePair.frame.width)
-                    let movePipes = SKAction.moveByX(-distance - 50, y: 0, duration: NSTimeInterval(0.008 * distance))
-                    let removePipes = SKAction.removeFromParent()
+                    movePipes = SKAction.moveByX(-distance - 50, y: 0, duration: NSTimeInterval(0.008 * distance))
+                    removePipes = SKAction.removeFromParent()
                     moveAndRemove = SKAction.sequence([movePipes, removePipes])
                     
                     Bird.physicsBody?.velocity = CGVectorMake(0, 0)
                     Bird.physicsBody?.applyImpulse(CGVectorMake(0, 11))
+                    runAction(SKAction.playSoundFileNamed("FlapSE.mp3", waitForCompletion: false))
+                    
 
                 
                 }
@@ -446,12 +516,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
         }else{
             
-            if died == true {
+            if died == true || pause == true {
+                
             
             }else{
             
                 Bird.physicsBody?.velocity = CGVectorMake(0, 0)
                 Bird.physicsBody?.applyImpulse(CGVectorMake(0, 11))
+                runAction(SKAction.playSoundFileNamed("FlapSE.mp3", waitForCompletion: false))
                 
             }
             
@@ -545,7 +617,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         pipePair.zPosition = 1
         
-        pipePair.runAction(moveAndRemove)
+        pipePair.runAction(moveAndRemove, withKey: "moveAndRemove")
         self.addChild(pipePair)
 
         
@@ -561,6 +633,60 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
                 
     }
+    
+    
+    func animateBG() -> SKAction {
+        let animateBG = SKAction.runBlock({
+            () in
+            
+            self.enumerateChildNodesWithName("Background", usingBlock: ({
+                (node, error) in
+                
+                let bg = node as! SKSpriteNode
+                bg.position = CGPoint(x: bg.position.x - 4, y: bg.position.y)
+                
+                if bg.position.x <= -bg.size.width {
+                    bg.position = CGPointMake(bg.position.x + 375/*bg.size.width*/ * 2, bg.position.y)
+                }
+                
+                
+                
+            }))
+            
+            self.enumerateChildNodesWithName("Ground", usingBlock: ({
+                (node, error) in
+                
+                let gd = node as! SKSpriteNode
+                gd.position = CGPoint(x: gd.position.x - 5, y: gd.position.y)
+                
+                if gd.position.x <= -gd.size.width {
+                    gd.position = CGPointMake(gd.position.x + 400 * 2, gd.position.y)
+                    
+                }
+                
+            }))
+            
+            
+            
+        })
+        
+        return animateBG
+
+        
+    
+    }
+    
+    func runAnimateBG(action: SKAction) {
+        self.runAction(action)
+    }
+    
+    
+    func stopAnimateBG(action: SKAction) {
+        action.speed = 0.0
+    }
+    
+    
+    
 
    
     override func update(currentTime: CFTimeInterval) {
@@ -568,39 +694,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         
         if gameStarted == true {
-            if died == false{
+            if died == false && pause == false {
                 //cam.setScale(1)
                 //cam.position = CGPoint(x: Bird.position.x + 70, y: 330)
                 Bird.zRotation = clamp(-1, max: 0.3, value: (Bird.physicsBody?.velocity.dy)! + 250)
-
-                                
-                enumerateChildNodesWithName("Background", usingBlock: ({
-                    (node, error) in
-                    
-                    let bg = node as! SKSpriteNode
-                    bg.position = CGPoint(x: bg.position.x - 4, y: bg.position.y)
-                    
-                    if bg.position.x <= -bg.size.width {
-                        bg.position = CGPointMake(bg.position.x + 375/*bg.size.width*/ * 2, bg.position.y)
-                    }
-                    
-               
-                    
-                }))
                 
-                enumerateChildNodesWithName("Ground", usingBlock: ({
-                    (node, error) in
-                    
-                    let gd = node as! SKSpriteNode
-                    gd.position = CGPoint(x: gd.position.x - 5, y: gd.position.y)
-                    
-                    if gd.position.x <= -gd.size.width {
-                        gd.position = CGPointMake(gd.position.x + 400 * 2, gd.position.y)
-
-                    }
-                    
-                }))
-
+                runAnimateBG(animateBG())
+                
+                
+                
             }
         }
     }
